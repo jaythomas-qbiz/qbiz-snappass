@@ -1,24 +1,32 @@
 import os
 import sys
 import uuid
+from distutils.util import strtobool
 
 import redis
-
 from cryptography.fernet import Fernet
 from flask import abort, Flask, render_template, request, jsonify
 from redis.exceptions import ConnectionError
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.urls import url_quote_plus
 from werkzeug.urls import url_unquote_plus
-from distutils.util import strtobool
 
 NO_SSL = bool(strtobool(os.environ.get('NO_SSL', 'False')))
 URL_PREFIX = os.environ.get('URL_PREFIX', None)
 HOST_OVERRIDE = os.environ.get('HOST_OVERRIDE', None)
 TOKEN_SEPARATOR = '~'
 
-
 # Initialize Flask Application
 app = Flask(__name__)
+
+# Fix for reverse proxy per https://flask.palletsprojects.com/en/2.3.x/deploying/proxy_fix/
+# This is needed to get the correct URL when running behind a reverse proxy
+# such as nginx or Apache. This is needed for the password link to work
+# correctly.
+app.wsgi_app = ProxyFix(
+    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+)
+
 if os.environ.get('DEBUG'):
     app.debug = True
 app.secret_key = os.environ.get('SECRET_KEY', 'Secret Key')
@@ -28,6 +36,7 @@ app.config.update(
 # Initialize Redis
 if os.environ.get('MOCK_REDIS'):
     from fakeredis import FakeStrictRedis
+
     redis_client = FakeStrictRedis()
 elif os.environ.get('REDIS_URL'):
     redis_client = redis.StrictRedis.from_url(os.environ.get('REDIS_URL'))
@@ -54,6 +63,7 @@ def check_redis_alive(fn):
                 sys.exit(0)
             else:
                 return abort(500)
+
     return inner
 
 
