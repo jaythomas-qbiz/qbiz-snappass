@@ -8,6 +8,21 @@ SnapPass
     :target: https://pypi.python.org/pypi/snappass
     :alt: Latest version released on PyPI
 
+--------------
+Note from Qbiz
+--------------
+**This is a Qbiz fork of snappass** with extra components and instructions
+to support running it in a secure manner on a server such as an EC2 instance.
+
+While this README has been largely unchanged, see the extras folder for the
+additional components and instructions.
+
+This is currently running at https://secrets.qbiz-wiki.com
+
+--------------
+Overview
+--------------
+
 It's like SnapChat... for passwords.
 
 This is a web app that lets you share passwords securely.
