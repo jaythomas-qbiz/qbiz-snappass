@@ -21,8 +21,7 @@ app = Flask(__name__)
 
 # Fix for reverse proxy per https://flask.palletsprojects.com/en/2.3.x/deploying/proxy_fix/
 # This is needed to get the correct URL when running behind a reverse proxy
-# such as nginx or Apache. This is needed for the password link to work
-# correctly.
+# such as nginx or Apache. This is needed for the password link to work correctly.
 app.wsgi_app = ProxyFix(
     app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
 )
