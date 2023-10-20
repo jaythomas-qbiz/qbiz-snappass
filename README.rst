@@ -19,6 +19,9 @@ additional components and instructions.
 
 This is currently running at https://secrets.qbiz-wiki.com
 
+See https://github.com/jaythomas-qbiz/qbiz-snappass/tree/master/extras#readme for detailed
+setup-from-scratch instructions
+
 --------------
 Overview
 --------------
