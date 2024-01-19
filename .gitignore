@@ -50,3 +50,6 @@ htmlcov/
 # virtualenv
 venv/
 ENV/
+
+# PyCharm
+.idea
